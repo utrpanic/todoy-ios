@@ -1,6 +1,8 @@
 import UIKit
 import SwiftUI
 
+import Firebase
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -17,7 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func setupApplication() {
-        
+        FirebaseApp.configure()
+        self.service.setupForApplication()
     }
     
     private func startApplication(with scene: UIScene) {
@@ -26,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if self.service.samIsHere {
                 window.rootViewController = UIHostingController(rootView: ContentView())
             } else {
-                window.rootViewController = UIHostingController(rootView: LoginView())
+                window.rootViewController = LoginController(rootView: LoginView())
             }
             window.makeKeyAndVisible()
             self.window = window
@@ -59,5 +62,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        self.service.handleUrl(url)
     }
 }
