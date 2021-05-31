@@ -9,7 +9,7 @@ struct LoginView: View {
     weak var listener: LoginViewListener?
     
     var body: some View {
-        return Button("Login") {
+        return Button("Google Login") {
             self.listener?.loginButtonTapped()
         }
     }

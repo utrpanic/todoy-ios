@@ -1,11 +1,13 @@
 import UIKit
 import SwiftUI
 
+import BoxKit
 import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var eventBus: EventBus = EventBus()
     var service: AuthService = AuthService()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -21,18 +23,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func setupApplication() {
         FirebaseApp.configure()
         self.service.setupForApplication()
+        self.eventBus.observe(LoggedInEvent.self) { [weak self] _ in
+            self?.updateWindowRoot()
+        }
+        self.eventBus.observe(LoggedInEvent.self) { [weak self] _ in
+            self?.updateWindowRoot()
+        }
     }
     
     private func startApplication(with scene: UIScene) {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            if self.service.samIsHere {
-                window.rootViewController = UIHostingController(rootView: ContentView())
-            } else {
-                window.rootViewController = LoginController(rootView: LoginView())
-            }
             window.makeKeyAndVisible()
             self.window = window
+            self.updateWindowRoot()
+        }
+    }
+    
+    private func updateWindowRoot() {
+        if self.service.samIsHere {
+            self.window?.rootViewController = UIHostingController(rootView: ContentView())
+        } else {
+            self.window?.rootViewController = LoginController(rootView: LoginView())
         }
     }
 
