@@ -3,6 +3,6 @@ protocol UserRepositoryProtocol {
     
 }
 
-class UserRepository: UserRepositoryProtocol {
+final class UserRepository: UserRepositoryProtocol {
     
 }

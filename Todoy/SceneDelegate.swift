@@ -8,7 +8,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var eventBus: EventBus = EventBus()
-    var service: AuthService = AuthService()
+    var service: AuthService = AuthService(userDefaults: UserDefaults.todoy)
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.eventBus.observe(LoggedInEvent.self) { [weak self] _ in
             self?.updateWindowRoot()
         }
-        self.eventBus.observe(LoggedInEvent.self) { [weak self] _ in
+        self.eventBus.observe(LoggedOutEvent.self) { [weak self] _ in
             self?.updateWindowRoot()
         }
     }
@@ -41,8 +41,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     private func updateWindowRoot() {
-        if self.service.samIsHere {
-            self.window?.rootViewController = UIHostingController(rootView: ContentView())
+        if self.service.samIsLoggedIn {
+            self.window?.rootViewController = MainController(rootView: MainView())
         } else {
             self.window?.rootViewController = LoginController(rootView: LoginView())
         }

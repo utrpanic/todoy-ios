@@ -2,11 +2,11 @@ import SwiftUI
 
 import GoogleSignIn
 
-final class LoginController: UIHostingController<LoginView>, LoginViewListener {
+final class MainController: UIHostingController<MainView>, MainViewListener {
     
     var service: AuthService = AuthService(userDefaults: UserDefaults.todoy)
     
-    override init(rootView: LoginView) {
+    override init(rootView: MainView) {
         super.init(rootView: rootView)
         self.rootView.listener = self
     }
@@ -15,7 +15,7 @@ final class LoginController: UIHostingController<LoginView>, LoginViewListener {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loginButtonTapped() {
-        self.service.login(presenting: self)
+    func logoutButtonTapped() {
+        self.service.logout()
     }
 }
